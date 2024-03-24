@@ -1,14 +1,41 @@
 import requests
 from bs4 import BeautifulSoup
 
-# HTML을 가져올 웹사이트의 URL
-url = 'https://www.naver.com'
+# 웹페이지 URL 설정
+url = 'https://www.naver.com/'
 
-# HTTP GET 요청을 보내고 응답을 받음
+# GET 요청 보내기
 resp = requests.get(url)
 
-# 응답의 HTML을 BeautifulSoup을 사용하여 파싱
-bs = BeautifulSoup(resp.text, 'html.parser')
+html = """
+<nav class="menu-box-1" id="menu-box">
+  <ul>
+    <li>
+      <a href="https://www.naver.com">네이버로 이동</a>
+    </li>
+    <li>
+      <a href="https://www.google.com">구글로 이동</a>
+    </li>
+    <li>
+      <a href="https://www.daum.net">다음으로 이동</a>
+    </li>
+  </ul>
+</nav>
+"""
 
-# 응답의 HTML 내용 출력
-print(bs)
+# HTML 파싱
+bs = BeautifulSoup(html, 'html.parser')
+
+# 첫번째로 이치하는 단일 요소의 접근
+a_tag = bs.select_one('a')
+
+# 모든 일치하는 요소로 접근할 때 사용, 리스트 반환
+a_tags = bs.select('a')
+
+# get_text() : 해당 엘리먼트가 품고 있는 텍스트 출력
+for tags in a_tags:
+  print(tags.get_text())
+  
+# get('href') : 해당 엘리먼트가 가지고 있는 속성 값을 출력
+for tags in a_tags:
+  print(tags.get('href'))
